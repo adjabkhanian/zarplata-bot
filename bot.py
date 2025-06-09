@@ -91,6 +91,7 @@ async def bar_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         amount = int(update.message.text)
         percent = 0
+
         if amount < 3500:
             percent = 5
         elif 3500 <= amount < 4000:
