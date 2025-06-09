@@ -49,16 +49,24 @@ def add_record(rec_type, amount, comment=""):
     send_to_airtable(date_str, rec_type, amount, comment)
 
 # --- Старт / Кнопки ---
-async def start(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
-    kb = [
-        [KeyboardButton("🕑 Дневная"), KeyboardButton("🌙 Ночная")],
-        [KeyboardButton("🍷 Бар"), KeyboardButton("💸 Расход")],
-        [KeyboardButton("🚫 Штраф"), KeyboardButton("📊 Отчёт")]
-    ]
-    await update.message.reply_text("Выбери действие 👇", reply_markup=ReplyKeyboardMarkup(kb, resize_keyboard=True))
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = [[KeyboardButton("▶️ Старт")]]
+    markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    await update.message.reply_text("Привет! Нажми кнопку 👇 для начала работы", reply_markup=markup)
 
-async def handle_buttons(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+async def handle_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     t = update.message.text
+
+    if t == "▶️ Старт":
+        keyboard = [
+            [KeyboardButton("🕑 Дневная"), KeyboardButton("🌙 Ночная")],
+            [KeyboardButton("🍷 Бар"), KeyboardButton("💸 Расход")],
+            [KeyboardButton("🚫 Штраф"), KeyboardButton("📊 Отчёт")]
+        ]
+        markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+        await update.message.reply_text("Выбери действие 👇", reply_markup=markup)
+        return ConversationHandler.END
+
     if t == "🕑 Дневная":
         add_record("смена", 2500, "дневная")
         await update.message.reply_text("✅ Дневная смена добавлена.")
@@ -84,6 +92,7 @@ async def handle_buttons(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("📅 Апрель", callback_data="month_2024_4")]
         ]
         await update.message.reply_text("Выбери месяц:", reply_markup=InlineKeyboardMarkup(kb2))
+    
     return ConversationHandler.END
 
 # --- Ввод суммы BAR, RASHOD, SHTRAF ---
