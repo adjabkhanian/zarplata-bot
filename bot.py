@@ -87,40 +87,30 @@ async def handle_buttons(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 # --- Ввод суммы BAR, RASHOD, SHTRAF ---
-async def bar_input(update: Update, ctx):
+async def bar_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
-        amt = int(update.message.text)
-        pct = 0
-        if amt < 2000:
-            pct = 0
-        elif 2000 <= amt < 3000:
-            pct = 4
-        elif 3000 <= amt < 3500:
-            pct = 5
-        elif 3500 <= amt < 4000:
-            pct = 6
-        elif 4000 <= amt < 4500:
-            pct = 7
-        elif 4500 <= amt < 5000:
-            pct = 8
-        elif 5000 <= amt < 5500:
-            pct = 9
-        elif 5500 <= amt < 6000:
-            pct = 10
-        elif 6000 <= amt < 7000:
-            pct = 11
-        elif 7000 <= amt < 8000:
-            pct = 12
-        elif 8000 <= amt < 10000:
-            pct = 13
-        elif amt >= 10000:
-            pct = 15
+        amount = int(update.message.text)
+        percent = 0
+        if amount < 3500:
+            percent = 5
+        elif 3500 <= amount < 4000:
+            percent = 6
+        elif 4000 <= amount < 4500:
+            percent = 7
+        elif 4500 <= amount < 5000:
+            percent = 8
+        elif 5000 <= amount < 5500:
+            percent = 9
+        elif 5500 <= amount < 10000:
+            percent = 10
+        elif amount >= 10000:
+            percent = 15
 
-        prof = amt * pct / 100
-        add_record("бар", prof, f"{amt}₽ → {pct}%")
-        await update.message.reply_text(f"🍷 Бар: +{prof:.0f}₽")
+        profit = amount * percent / 100
+        add_record("бар", profit, f"{amount}₽ — {percent}%")
+        await update.message.reply_text(f"🍷 Бар: {amount}₽ → {percent}% = +{profit:.0f}₽")
     except:
-        await update.message.reply_text("Ошибка формата — введите целое число.")
+        await update.message.reply_text("Неверный формат. Введите сумму числом.")
     return ConversationHandler.END
 
 async def rashod_input(update: Update, ctx):
